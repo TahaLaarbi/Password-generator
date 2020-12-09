@@ -13,9 +13,11 @@ from PyQt5.uic import loadUiType
 from os import path
 import sys
 import random
+import pyperclip
+
+
 
 ui,_ = loadUiType(path.join(path.dirname(__file__), "Password generator.ui"))
-
 
 class MainApp(QWidget, ui):
     def __init__(self, parent=None):
@@ -28,10 +30,13 @@ class MainApp(QWidget, ui):
 
     def Handle_UI(self):
         pass
-    def Handle_Buttons(self):
-        self.pushButton.clicked.connect(self.test)
 
-    def test(self):
+    def Handle_Buttons(self):
+        self.pushButton.clicked.connect(self.generate)
+        self.pushButton_2.clicked.connect(self.copy)
+
+    def generate(self):
+        global password
         sma = "abcdefghijklmnopqrstuvwxyz"
         cap = sma.upper()
         num = "0123456789"
@@ -47,7 +52,13 @@ class MainApp(QWidget, ui):
             pas += sym
         password = ''.join(random.choices(pas, k=self.spinBox.value()))
         self.lineEdit.setText(password)
-        print(password)
+
+    def copy(self):
+        pyperclip.copy(password)
+
+    def display(self):
+        self.lineEdit.setText(self.generate())
+
 
 def main():
     app = QApplication(sys.argv)
